@@ -4,16 +4,25 @@ import StoreTagFactory from "./StoreTags";
 
 
 
-const connectionString =
-  process.env.DATABASE_URL ||
-  `postgres://${process.env.DB_USER || "local_user"}:${process.env.DB_PASSWORD || "local_pass"}@${
-    process.env.DB_HOST || "localhost"
-  }:5432/${process.env.DB_NAME || "local_db"}`;
+const connectionString = process.env.DATABASE_URL 
+  ? process.env.DATABASE_URL 
+  : `postgres://${process.env.DB_USER || "local_user"}:${process.env.DB_PASSWORD || "local_pass"}@${
+      process.env.DB_HOST || "localhost"
+    }:5432/${process.env.DB_NAME || "local_db"}`;
 
 const sequelize = new Sequelize(connectionString, {
   dialect: "postgres",
   logging: false,
+  dialectOptions: process.env.DATABASE_URL
+    ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      }
+    : {},
 });
+
 
 
 sequelize
