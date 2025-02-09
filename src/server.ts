@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5003;
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://wan-paradise-frontend.herokuapp.com', // 本番環境のURL
+  'https://wan-paradise-a5437997cc6f.herokuapp.com', // 本番環境のURL
 ];
 
 
