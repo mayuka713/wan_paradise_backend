@@ -40,9 +40,8 @@
     "sequelize": "^6.37.5",
     "typeorm": "^0.3.20"
   },
- "engines": {
-  "node": "18.x",
-  "npm": "10.x"
-}
-
+  "engines": {
+    "node": "18.x",
+    "npm": "10.x"
+  }
 }
