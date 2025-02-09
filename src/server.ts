@@ -17,13 +17,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5003;
 
-const allowedOrigins = ['http://localhost:3000', 'http://example.com'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://wan-paradise-frontend.herokuapp.com', // 本番環境のURL
+];
+
 
 
 // ミドルウェアの設定
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
