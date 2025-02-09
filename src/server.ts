@@ -41,6 +41,8 @@ app.use(session({
 }));
 
 app.use(cookieParser())
+app.options("*", cors()); // すべてのプリフライトリクエストを許可
+
 
 // ルートの設定
 app.get('/', (req, res) => {
