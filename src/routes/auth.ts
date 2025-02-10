@@ -10,6 +10,12 @@ router.post('/register', async (req: Request, res: Response) => {
   const { email, name, password } = req.body;
 
   try {
+      // **① 重複チェック**
+      const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+      if (existingUser.rows.length > 0) {
+        return res.status(409).json({ error: "このメールアドレスは既に登録されています。" });
+      }
+  
     // パスワードのハッシュ化
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -21,6 +27,13 @@ router.post('/register', async (req: Request, res: Response) => {
       RETURNING id, name, email`,
       [name, email, hashedPassword]
     );
+
+        // **④ クッキーを設定**
+        res.cookie('user_id', result.rows[0].id, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 24 * 60 * 60 * 1000, // 1日
+        });
 
     res.status(201).json({
       message: 'ユーザーが登録されました。',
