@@ -54,11 +54,9 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.status(401).json({ error: '無効なメールアドレスまたはパスワードです。' });
     }
 
- 
-
     // クッキーに user_id を保存
     res.cookie('user_id', user.id, {
-      httpOnly: false, // フロントエンドからもアクセス可能にする
+      httpOnly: true, // フロントエンドからもアクセス可能にする
       secure: process.env.NODE_ENV === 'production',
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
@@ -81,6 +79,8 @@ router.post('/login', async (req: Request, res: Response) => {
 // 現在のログインユーザーを取得するエンドポイント
 router.get('/me', (req: Request, res: Response) => {
   const userId = req.cookies.user_id;
+  console.log("リクエストヘッダー:", req.headers);
+  console.log("クッキー:", req.cookies);
 
   if (!userId) {
     return res.status(401).json({ error: "未ログイン" });
