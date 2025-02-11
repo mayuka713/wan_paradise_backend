@@ -59,7 +59,7 @@ router.post('/login', async (req: Request, res: Response) => {
       httpOnly: true,
       secure: true,  // ✅ HTTPS 必須
       sameSite: "none",  // ✅ クロスサイトリクエスト対応
-      domain: process.env.COOKIE_DOMAIN || "wan-paradise-a5437997cc6f.herokuapp.com", // ✅ フロントと同じドメインにする
+      domain: "wan-paradise-a5437997cc6f.herokuapp.com", // ✅ フロントと同じドメインにする
       path: "/", // ✅ ルートパスに適用
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
