@@ -34,16 +34,21 @@ app.use(cors({
 
 // **すべてのプリフライトリクエスト (OPTIONS) を許可**
 app.options("*", cors());
+app.use(cookieParser());
 
 // **セッションの設定**
 app.use(session({
   secret: process.env.SESSION_SECRET || 'mysecretkey',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true, httpOnly: true, sameSite: "none" }, // **secure: true & sameSite: "none"**
+  cookie: {
+    secure: process.env.NODE_ENV === "production", // ✅ 本番環境のみ `true`
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // ✅ ローカルでは `lax`
+  },
 }));
 
-app.use(cookieParser());
+
 
 // **CORS ヘッダーを明示的に設定**
 app.use((req, res, next) => {
@@ -53,6 +58,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
+
 
 // ルートの設定
 app.get("/", (req, res) => {

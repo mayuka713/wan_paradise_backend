@@ -57,10 +57,12 @@ router.post('/login', async (req: Request, res: Response) => {
     // クッキーに user_id を保存
     res.cookie('user_id', user.id, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',  // 本番環境では true
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // クッキーのポリシーを指定
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
+
+    console.log("Set-Cookie sent:", res.getHeaders()["set-cookie"]); // ✅ ここでログ出力
 
     // レスポンスを返す
     res.status(200).json({
@@ -76,6 +78,7 @@ router.post('/login', async (req: Request, res: Response) => {
     res.status(500).json({ error: 'サーバーエラーが発生しました。' });
   }
 });
+
 
 // 現在のログインユーザーを取得するエンドポイント
 router.get('/me', (req: Request, res: Response) => {
