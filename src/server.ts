@@ -16,15 +16,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5003;
-// フロントエンドのビルド済みファイルを提供
-const frontendPath = path.join(__dirname, '../frontend/build');  // 🔥 ビルドフォルダのパス
-
-app.use(express.static(frontendPath));  // ✅ フロントエンドを静的ファイルとして提供
-
-// すべてのリクエストを React の `index.html` にリダイレクト
-app.get('*', (req, res) => {
-  res.sendFile(path.join(frontendPath, 'index.html'));
-});
 
 // CORS 設定（フロントエンドのURLを環境変数から取得）
 const allowedOrigins = [
