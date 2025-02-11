@@ -56,8 +56,9 @@ router.post('/login', async (req: Request, res: Response) => {
 
     // クッキーに user_id を保存
     res.cookie('user_id', user.id, {
-      httpOnly: true, // フロントエンドからもアクセス可能にする
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',  // 本番環境では true
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // クッキーのポリシーを指定
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
 
