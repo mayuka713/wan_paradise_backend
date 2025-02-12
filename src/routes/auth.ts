@@ -57,14 +57,14 @@ router.post('/login', async (req: Request, res: Response) => {
     // クッキーに user_id を保存
     res.cookie('user_id', user.id, {
       httpOnly: true,
-      secure: true,  // ✅ HTTPS 必須
-      sameSite: "none",  // ✅ クロスサイトリクエスト対応
-      domain: "wan-paradise-a5437997cc6f.herokuapp.com", // ✅ フロントと同じドメインにする
-      path: "/", // ✅ ルートパスに適用
+      secure: true,  // HTTPS 必須
+      sameSite: "none",  // クロスサイトリクエスト対応
+      domain: "wan-paradise-a5437997cc6f.herokuapp.com", // フロントと同じドメインにする
+      path: "/", // ルートパスに適用
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
 
-    console.log("Set-Cookie sent:", res.getHeaders()["set-cookie"]); // ✅ ここでログ出力
+    console.log("Set-Cookie sent:", res.getHeaders()["set-cookie"]); // ここでログ出力
 
     // レスポンスを返す
     res.status(200).json({

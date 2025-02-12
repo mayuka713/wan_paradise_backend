@@ -20,7 +20,8 @@ const PORT = process.env.PORT || 5003;
 // CORS 設定（フロントエンドのURLを環境変数から取得）
 const allowedOrigins = [
   "http://localhost:3000",
-  process.env.FRONTEND_URL || "https://wan-paradise-a5437997cc6f.herokuapp.com", // 環境変数から取得
+  process.env.FRONTEND_URL || "https://wan-paradise-a5437997cc6f.herokuapp.com",
+  "https://wan.mayuka.site" // 環境変数から取得
 ];
 
 app.use(express.json());
