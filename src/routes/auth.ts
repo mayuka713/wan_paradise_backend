@@ -58,8 +58,8 @@ router.post('/login', async (req: Request, res: Response) => {
     res.cookie('user_id', user.id, {
       httpOnly: true,
       secure: true,  // HTTPS 必須
-      sameSite: "none",  // クロスサイトリクエスト対応
-      domain: "wan-paradise-a5437997cc6f.herokuapp.com", // フロントと同じドメインにする
+      sameSite: "lax",  // クロスサイトリクエスト対応
+      domain: "wan.mayuka.site", // フロントと同じドメインにする
       path: "/", // ルートパスに適用
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
