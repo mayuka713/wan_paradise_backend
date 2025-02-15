@@ -14,29 +14,29 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { 
-          model: 'users', // 対応するユーザーテーブル
+          model: 'users', 
           key: 'id',
         },
-        onDelete: 'CASCADE', // ユーザーが削除されたらお気に入りも削除
+        onDelete: 'CASCADE', 
       },
       store_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { 
-          model: 'stores', // 対応するストアテーブル
+          model: 'stores',
           key: 'id',
         },
-        onDelete: 'CASCADE', // 店舗が削除されたらお気に入りも削除
+        onDelete: 'CASCADE',
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW'), // デフォルトで現在時刻
+        defaultValue: Sequelize.fn('NOW'), 
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn('NOW'), // デフォルトで現在時刻
+        defaultValue: Sequelize.fn('NOW'), 
       },
     });
   },

@@ -24,9 +24,11 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
         const saltRounds = 10;
         const hashedPassword = yield bcrypt_1.default.hash(password, saltRounds);
         // データベースにユーザー情報を保存
-        const result = yield db_1.default.query(`INSERT INTO users (name, email, password, "createdAt", "updatedAt") 
-      VALUES ($1, $2, $3, NOW(), NOW()) 
-      RETURNING id, name, email`, [name, email, hashedPassword]);
+        const result = yield db_1.default.query(
+            `INSERT INTO users (name, email, password, "createdAt", "updatedAt") 
+            VALUES ($1, $2, $3, NOW(), NOW()) 
+            RETURNING id, name, email`,
+            [name, email, hashedPassword]);
         res.status(201).json({
             message: 'ユーザーが登録されました。',
             redirectUrl: process.env.REDIRECT_URL,

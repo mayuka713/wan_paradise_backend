@@ -68,11 +68,12 @@ router.delete("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 router.get("/:user_id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { user_id } = req.params;
     try {
-        const result = yield db_1.default.query(`SELECT f.store_id AS store_id, s.name AS store_name, 
-      s.address AS store_address, s.store_img, s.store_type
-      FROM favorites f
-      JOIN stores s ON f.store_id = s.id
-      WHERE f.user_id = $1`, [user_id]);
+        const result = yield db_1.default.query(
+            `SELECT f.store_id AS store_id, s.name AS store_name, 
+            s.address AS store_address, s.store_img, s.store_type
+            FROM favorites f
+            JOIN stores s ON f.store_id = s.id
+            WHERE f.user_id = $1`, [user_id]);
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "お気に入りデータが見つかりません。" });
         }

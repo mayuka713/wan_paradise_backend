@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
-import pool from "../db"; // データベース接続を提供するファイル
+import pool from "../db";
 
 const router = Router();
 
-// 型定義
+
 interface Review {
   id: number;
   store_id: number;

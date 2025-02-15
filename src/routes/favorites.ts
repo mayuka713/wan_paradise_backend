@@ -16,7 +16,6 @@ router.post("/", async (req: Request, res: Response) => {
         .status(400)
         .json({ error: "ユーザーIDまたはストアIDが不足しています。" });
     }
-
     const result = await pool.query(
       "INSERT INTO favorites (user_id, store_id, created_at) VALUES ($1, $2, NOW()) RETURNING *",
       [user_id, store_id]

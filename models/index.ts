@@ -23,8 +23,6 @@ const sequelize = new Sequelize(connectionString, {
     : {},
 });
 
-
-
 sequelize
   .authenticate()
   .then(() => console.log("データベースに接続成功"))

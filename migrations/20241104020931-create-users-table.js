@@ -1,6 +1,4 @@
-'use strict';//この1行目のコードは「厳格モード」。厳格モードを使うと、コードのエラーやバグを見つけやすくなり、安全なコードを書きやすくなる。
-
-//Sequelizeを使ってDBにusersの新しいテーブルを追加するためのマイグレ
+'use strict';
 
 module.exports = {
   async up(queryInterface, Sequelize) //テーブルを作成するための関数
