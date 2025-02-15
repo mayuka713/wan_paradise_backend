@@ -58,7 +58,7 @@ router.post('/login', async (req: Request, res: Response) => {
     res.cookie('user_id', user.id, {
       httpOnly: true,
       secure: true,  // HTTPS 必須
-      sameSite: "None",  // クロスサイトリクエスト対応
+      sameSite: "none",  // クロスサイトリクエスト対応
       path: "/", // ルートパスに適用
       maxAge: 24 * 60 * 60 * 1000, // 1日
     });
