@@ -47,18 +47,36 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-// **現在のログインユーザーの取得**
 router.get("/me", async (req: Request, res: Response) => {
-  const userId = req.cookies[COOKIE_NAME]; // ✅ クッキーから `user_id` を取得
+  console.log("📌 [auth/me] クッキー一覧:", req.cookies);
+
+  const userId = req.cookies.user_id; // ✅ クッキーから `user_id` を取得
 
   if (!userId) {
     console.log("⚠️ [auth/me] 未ログインのため 401 を返します");
     return res.status(401).json({ error: "未ログイン" });
   }
 
-  console.log("✅ [auth/me] クッキーから取得した `user_id`:", userId);
-  res.json({ user_id: Number(userId) });
+  try {
+    // ✅ `users` テーブルから `id, email, name` を取得
+    const userResult = await pool.query("SELECT id, email, name FROM users WHERE id = $1", [userId]);
+
+    if (userResult.rows.length === 0) {
+      console.log("⚠️ [auth/me] ユーザーが見つかりません");
+      return res.status(401).json({ error: "未ログイン" });
+    }
+
+    const user = userResult.rows[0];
+    console.log("✅ [auth/me] ログイン済みユーザー:", user);
+
+    // ✅ `user` オブジェクトを含めてレスポンスを返す
+    res.json({ user });
+  } catch (error) {
+    console.error("クッキー解析エラー:", error);
+    res.status(500).json({ error: "サーバーエラーが発生しました。" });
+  }
 });
+
 
 // **ログアウト**
 router.post('/logout', (req: Request, res: Response) => {
