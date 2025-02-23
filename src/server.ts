@@ -29,11 +29,12 @@ app.use(express.json());
 // **CORS 設定をプリフライトリクエストの前に設定**
 app.use(
   cors({
-  origin: "https://wan.mayuka.site",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+    origin: ["http://localhost:3000", "https://wan.mayuka.site"], // 許可するオリジン
+    methods: "GET, POST, PUT, DELETE, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+    credentials: true, // クッキーを含める場合は true
+  })
+);
 
 // **すべてのプリフライトリクエスト (OPTIONS) を許可**
 app.options("*", cors());
@@ -47,7 +48,7 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === "production", // ✅ 本番環境のみ `true`
     httpOnly: true,
-    sameSite: "lax", // ✅ ローカルでは `lax`
+    sameSite: "none", // ✅ ローカルでは `lax`
   },
 }));
 
