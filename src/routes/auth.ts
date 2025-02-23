@@ -67,4 +67,25 @@ router.post('/logout', (req: Request, res: Response) => {
   res.json({ message: 'ログアウト成功' });
 });
 
+router.post('/register', async (req: Request, res: Response) => {
+  console.log("✅ /auth/register にリクエストが届きました"); // デバッグ用
+  const { email, name, password } = req.body;
+
+  try {
+    // DB にユーザー情報を保存
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await pool.query(
+      `INSERT INTO users (name, email, password, "createdAt", "updatedAt") 
+      VALUES ($1, $2, $3, NOW(), NOW()) RETURNING id, name, email`,
+      [name, email, hashedPassword]
+    );
+
+    res.status(201).json({ message: "ユーザーが登録されました", user: result.rows[0] });
+  } catch (error) {
+    console.error("❌ ユーザー登録エラー:", error);
+    res.status(500).json({ error: "ユーザー登録に失敗しました" });
+  }
+});
+
+
 export default router;

@@ -16,85 +16,55 @@ const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_1 = __importDefault(require("../db"));
 const router = express_1.default.Router();
-// ユーザー登録エンドポイント
-router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, name, password } = req.body;
-    try {
-        // パスワードのハッシュ化
-        const saltRounds = 10;
-        const hashedPassword = yield bcrypt_1.default.hash(password, saltRounds);
-        // データベースにユーザー情報を保存
-        const result = yield db_1.default.query(
-            `INSERT INTO users (name, email, password, "createdAt", "updatedAt") 
-            VALUES ($1, $2, $3, NOW(), NOW()) 
-            RETURNING id, name, email`,
-            [name, email, hashedPassword]);
-        res.status(201).json({
-            message: 'ユーザーが登録されました。',
-            redirectUrl: process.env.REDIRECT_URL,
-            user: {
-                id: result.rows[0].id,
-                email: result.rows[0].email,
-                name: result.rows[0].name,
-            },
-        });
-    }
-    catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ error: 'ユーザー登録中にエラーが発生しました。' });
-    }
-}));
-// ユーザーログインエンドポイント
-router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// **クッキー設定**
+const COOKIE_NAME = "user_id"; // ✅ `user_id` のみをクッキーに保存
+const COOKIE_OPTIONS = {
+    httpOnly: true, // ✅ JavaScript からのアクセスを禁止（セキュリティ対策）
+    secure: process.env.NODE_ENV === "production", // ✅ 本番環境では HTTPS のみ
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // ✅ クロスオリジン対応
+    maxAge: 24 * 60 * 60 * 1000, // ✅ 1日
+};
+// **ログイン**
+router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("ログインリクエストのボディ:", req.body);
     const { email, password } = req.body;
     try {
-        const userResult = yield db_1.default.query('SELECT * FROM users WHERE email = $1', [email]);
+        const userResult = yield db_1.default.query("SELECT id, password FROM users WHERE email = $1", [email]);
         if (userResult.rows.length === 0) {
-            return res.status(401).json({ error: '無効なメールアドレスまたはパスワードです。' });
+            return res.status(401).json({ error: "無効なメールアドレスまたはパスワードです。" });
         }
         const user = userResult.rows[0];
         const passwordMatch = yield bcrypt_1.default.compare(password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({ error: '無効なメールアドレスまたはパスワードです。' });
+            return res.status(401).json({ error: "無効なメールアドレスまたはパスワードです。" });
         }
-        // クッキーに user_id を保存
-        res.cookie('user_id', user.id, {
-            httpOnly: false, // フロントエンドからもアクセス可能にする
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000, // 1日
-        });
-        // レスポンスを返す
-        res.status(200).json({
-            message: 'ログイン成功',
-            user: {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-            },
+        // **クッキーに `user_id` のみ保存**
+        res.cookie(COOKIE_NAME, user.id.toString(), COOKIE_OPTIONS);
+        console.log("✅ クッキーに `user_id` を保存:", user.id);
+        return res.status(200).json({
+            message: "ログイン成功",
+            user_id: user.id, // クライアントに `user_id` を返す
         });
     }
     catch (error) {
-        console.error('Error during user login:', error);
-        res.status(500).json({ error: 'サーバーエラーが発生しました。' });
+        console.error("ログイン中にエラー:", error);
+        res.status(500).json({ error: "サーバーエラーが発生しました。" });
     }
 }));
-// 現在のログインユーザーを取得するエンドポイント
-router.get('/me', (req, res) => {
-    const userId = req.cookies.user_id;
+// **現在のログインユーザーの取得**
+router.get("/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.cookies[COOKIE_NAME]; // ✅ クッキーから `user_id` を取得
     if (!userId) {
+        console.log("⚠️ [auth/me] 未ログインのため 401 を返します");
         return res.status(401).json({ error: "未ログイン" });
     }
-    console.log("クッキーから取得した user_id:", userId);
-    res.json({ user_id: userId });
-});
-// ログアウトエンドポイント
+    console.log("✅ [auth/me] クッキーから取得した `user_id`:", userId);
+    res.json({ user_id: Number(userId) });
+}));
+// **ログアウト**
 router.post('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('ログアウトエラー:', err);
-            return res.status(500).json({ error: 'ログアウトに失敗しました。' });
-        }
-        res.json({ message: 'ログアウト成功' });
-    });
+    res.clearCookie(COOKIE_NAME, COOKIE_OPTIONS); // ✅ クッキー削除
+    console.log("✅ `user_id` クッキーを削除");
+    res.json({ message: 'ログアウト成功' });
 });
 exports.default = router;

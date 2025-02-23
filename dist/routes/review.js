@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const db_1 = __importDefault(require("../db")); // データベース接続を提供するファイル
+const db_1 = __importDefault(require("../db"));
 const router = (0, express_1.Router)();
 // **全てのレビューを取得（店舗名を含む）**
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
