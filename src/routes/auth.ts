@@ -86,12 +86,17 @@ router.post("/update", async (req: Request, res: Response) => {
 
   const { name, email, password } = req.body;
 
+  console.log("📌 更新リクエスト受信:", { userId, name, email, password });
+
+  if (!name || !email) {
+    return res.status(400).json({ error: "名前とメールアドレスは必須です" });
+  }
+
   try {
     let query = "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING id, name, email";
     let values = [name, email, userId];
 
     if (password) {
-      // パスワードがある場合はハッシュ化して更新
       const hashedPassword = await bcrypt.hash(password, 10);
       query = "UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 RETURNING id, name, email";
       values = [name, email, hashedPassword, userId];
@@ -105,8 +110,8 @@ router.post("/update", async (req: Request, res: Response) => {
 
     res.json({ message: "プロフィールが更新されました", user: result.rows[0] });
   } catch (error) {
-    console.error("プロフィール更新エラー:", error);
-    res.status(500).json({ error: "サーバーエラーが発生しました" });
+    console.error("❌ プロフィール更新エラー:", error);
+    res.status(500).json({ error: "サーバーエラーが発生しました。" });
   }
 });
 
