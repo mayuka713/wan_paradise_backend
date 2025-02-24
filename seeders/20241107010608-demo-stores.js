@@ -677,6 +677,7 @@ module.exports = {
           store_url: "https://www.petland.co.jp/shop/chuo.html",
           store_img: JSON.stringify([
             "https://res.cloudinary.com/do4lxnof9/image/upload/v1733273150/wan_paradise/PetShop/petland.png",
+            "https://res.cloudinary.com/do4lxnof9/image/upload/v1740364461/wan_paradise/PetShop/petland.chuo.png"// ,
           ]),
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -711,7 +712,7 @@ module.exports = {
           phone_number: "011-867-0566",
           store_url: "https://petshop-dogdog.com/",
           store_img: JSON.stringify([
-            "https://res.cloudinary.com/do4lxnof9/image/upload/v1737422928/wan_paradise/petshop.hokkaido/Petshop%20Dog%20dog/2.png",
+            "https://res.cloudinary.com/do4lxnof9/image/upload/v1740364166/wan_paradise/PetShop/petshopdogdog.png",
           ]),
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -787,6 +788,7 @@ module.exports = {
             "https://midori-no-mori.jp/sapporo/?utm_source=google&utm_medium=map_meo&utm_campaign=web_sapporo",
           store_img: JSON.stringify([
             "https://res.cloudinary.com/do4lxnof9/image/upload/v1737422883/wan_paradise/petshop.tokyo/joyful%20honda/1.png",
+            "https://res.cloudinary.com/do4lxnof9/image/upload/v1740364648/wan_paradise/PetShop/joyful.honda.png"
           ]),
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -841,6 +843,7 @@ module.exports = {
             "https://www.pfirst.jp/storedetails?storeId=776&utm_source=google&utm_medium=maps&utm_campaign=info",
           store_img: JSON.stringify([
             "https://res.cloudinary.com/do4lxnof9/image/upload/v1737422885/wan_paradise/petshop.tokyo/Ps-first/1.png",
+            "https://res.cloudinary.com/do4lxnof9/image/upload/v1740364750/wan_paradise/PetShop/ps-first.png"
           ]),
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -959,6 +962,7 @@ module.exports = {
             "https://midori-no-mori.jp/sapporo/?utm_source=google&utm_medium=map_meo&utm_campaign=web_sapporo",
           store_img: JSON.stringify([
             "https://res.cloudinary.com/do4lxnof9/image/upload/v1735011103/wan_paradise/DogRun/midorinomori.sapporo.hospital.png",
+            "https://res.cloudinary.com/do4lxnof9/image/upload/v1740365349/wan_paradise/PetShop/midorinomori.png"
           ]),
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -1011,6 +1015,7 @@ module.exports = {
           store_url: "https://atsuki-ac.com/",
           store_img: JSON.stringify([
             "https://res.cloudinary.com/do4lxnof9/image/upload/v1735010881/wan_paradise/DogRun/atsuki.hokkaido.png",
+            "https://res.cloudinary.com/do4lxnof9/image/upload/v1740365031/wan_paradise/PetShop/akatsu.png"
           ]),
           createdAt: new Date(),
           updatedAt: new Date(),

@@ -1,4 +1,18 @@
 {
+  "development": {
+    "username": "hadamayuka",
+    "password": "1111",
+    "database": "hadamayuka",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "hadamayuka",
+    "password": "your_db_password",
+    "database": "your_db_name_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
   "production": {
     "use_env_variable": "DATABASE_URL",
     "dialect": "postgres",

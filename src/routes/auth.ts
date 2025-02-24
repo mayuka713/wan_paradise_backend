@@ -86,7 +86,7 @@ router.post("/update", async (req: Request, res: Response) => {
 
   const { name, email, password } = req.body;
 
-  console.log("📌 更新リクエスト受信:", { userId, name, email, password });
+  console.log("更新リクエスト受信:", { userId, name, email, password });
 
   if (!name || !email) {
     return res.status(400).json({ error: "名前とメールアドレスは必須です" });
@@ -102,16 +102,16 @@ router.post("/update", async (req: Request, res: Response) => {
       values = [name, email, hashedPassword, userId];
     }
 
-    console.log("📌 実行するSQL:", query, values);
+    console.log("実行するSQL:", query, values);
     const result = await pool.query(query, values);
     
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "ユーザーが見つかりません" });
     }
 
-    console.log("✅ [update] プロフィール更新成功:", result.rows[0]);
+    console.log("[update] プロフィール更新成功:", result.rows[0]);
     res.json({ message: "プロフィールが更新されました", user: result.rows[0] });
-    
+
   } catch (error) {
     console.error("プロフィール更新エラー:", error);
     res.status(500).json({ error: "サーバーエラーが発生しました。" });
