@@ -8,10 +8,10 @@
   "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
   "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate",
   "migration:revert": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert",
-  "seed": "ts-node src/seeds/index.ts",
     "start": "node dist/server.js",
     "dev": "ts-node src/server.ts",
     "migrate": "npx sequelize-cli db:migrate",
+    "seed": "npx sequelize-cli db:seed:all",
     "heroku-postbuild": "npm run build",
     "build": "tsc"
 
