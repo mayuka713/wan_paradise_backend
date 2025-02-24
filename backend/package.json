@@ -11,9 +11,10 @@
   "seed": "ts-node src/seeds/index.ts",
     "start": "node dist/server.js",
     "dev": "ts-node src/server.ts",
+    "migrate": "npx sequelize-cli db:migrate",
     "heroku-postbuild": "npm run build",
-    "build": "tsc",
-      "migrate": "sequelize db:migrate"
+    "build": "tsc"
+
   },
   "keywords": [],
   "author": "",
