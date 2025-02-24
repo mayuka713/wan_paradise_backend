@@ -96,21 +96,24 @@ router.post("/update", async (req: Request, res: Response) => {
     let query = "UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING id, name, email";
     let values = [name, email, userId];
 
-    if (password) {
+    if (password && password.trim() !== "") { // 空のパスワードをハッシュ化しない
       const hashedPassword = await bcrypt.hash(password, 10);
       query = "UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 RETURNING id, name, email";
       values = [name, email, hashedPassword, userId];
     }
 
+    console.log("📌 実行するSQL:", query, values);
     const result = await pool.query(query, values);
     
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "ユーザーが見つかりません" });
     }
 
+    console.log("✅ [update] プロフィール更新成功:", result.rows[0]);
     res.json({ message: "プロフィールが更新されました", user: result.rows[0] });
+    
   } catch (error) {
-    console.error("❌ プロフィール更新エラー:", error);
+    console.error("プロフィール更新エラー:", error);
     res.status(500).json({ error: "サーバーエラーが発生しました。" });
   }
 });
