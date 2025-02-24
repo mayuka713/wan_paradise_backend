@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  
 "scripts": {
   "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
   "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run",
@@ -14,7 +15,6 @@
     "seed": "ts-node src/seeds/index.ts",
     "heroku-postbuild": "npm run build",
     "build": "tsc"
-
   },
   "keywords": [],
   "author": "",
