@@ -48,11 +48,10 @@ React / Express / PostgreSQL で構成されたフルスタックアプリで、
 
 （タグによる絞り込み機能）
 
-・タグデータはGET/tagsエンドポイントから取得し、tag_typeによって種類別（例：type1=特徴、type2=設備）に分類して表示
+① '/list/tag/:prefectureId'で指定された 都道府県ID (prefectureId) に応じて、データベースから店舗情報（名前、住所、URL、画像など）を取得して返します。該当する店舗がなければ、404エラーを返します。
 
-・タグをクリックすると、ReactのselectedTagIdsステートにIDを追加または削除（トグル処理）
+② '/'でデータベースのタグ情報（全件）を取得し、一覧で返します。
 
-・取得した店舗情報（画像・住所・評価・営業時間など）をReactでリスト表示し、星評価の平均は review.rating の平均値として計算し視覚化
 
 
 <img width="700" alt="スクリーンショット 2025年4月20日" src="https://github.com/user-attachments/assets/a3091ebe-22fe-41eb-8aa9-52cedd8da910" />
@@ -60,28 +59,40 @@ React / Express / PostgreSQL で構成されたフルスタックアプリで、
 
 （レビュー投稿機能）
 
-・特定の店舗ごとにレビューを取得・表示（GET/reviews/:store_id）
+① /（GET）ですべてのレビュー情報（店舗名付き）を取得しています。
 
-・平均評価を計算して表示（フロント側で計算）
+② /:store_id（GET)で指定された店舗IDに関連するレビューを取得します。レビュー情報だけでなく、店舗名と平均評価（average_rating）も一緒に返します。もし、レビューがなければ404エラーを返します。
 
-・投稿時はモーダルを使用し、コメントと星評価を送信
+③ /（POST）で新しいレビューを投稿できます。必須情報（store_id, rating, comment）が揃っていないとエラーになります。登録後、店舗名付きのレビュー情報を返します。
+
 
 ![Favorites from wan mayuka site](https://github.com/user-attachments/assets/6daae0f1-572e-4280-b301-ad369789add5)
 
 （お気に入り登録機能）
 
-・ログイン中のユーザー情報を/auth/meから取得
+① お気に入り追加（POST /）でユーザーが特定のお店をお気に入り登録できます。また、user_id と store_id を受け取って、データベースの favorites テーブルに保存します。登録が成功すると、登録したデータを返します。
 
-・ユーザーIDをもとに、/favorites/:user_idからお気に入り店舗を取得
+② お気に入り削除（DELETE /）でユーザーがお気に入りを解除できます。user_id と store_id を受け取って、該当するお気に入りデータを削除します。該当データがない場合は404エラーを返します。
 
-・お気に入り追加：POST/favoritesにuser_idとstore_idを送信。 お気に入り削除: DELETE/favoritesにuser_idとstore_idを送信。
+③ お気に入り一覧取得（GET /:user_id）で指定したユーザーのお気に入りリストを取得できます。お店の名前、住所、画像、種類などの情報もあわせて取得して返します。
+
+
 
 <img width="441" alt="スクリーンショット 2025年4月20日" src="https://github.com/user-attachments/assets/47a8ef62-bbe9-4231-8f84-4bb7d303296a" />
 
 （マイページの登録）
 
-・　ユーザー情報をGET/auth/meで取得し、ユーザー名・メールアドレスをマイページに表示
+① ユーザー登録（/register）でname, email, passwordを受け取り、パスワードをハッシュ化して保存させる。
 
-・プロフィールの変更はPOST/auth/updateにて送信し、名前・メール・パスワードを更新
+② ログイン（/login）で入力情報を照合し、成功したらクッキーにuser_idを保存してログイン状態を管理。
 
-・ログアウトはPOST/auth/logoutによりセッション用クッキーを削除してログアウト完了
+③ ログイン状態確認（/me）でクッキーのuser_idをもとに、ログイン中のユーザー情報を取得。
+
+④ プロフィール更新（/update）でnameやemail、必要に応じてパスワードも更新（再ハッシュ化）させています。
+
+⑤ ログアウト（/logout）でクッキーからuser_idを削除して、ログアウトさせます。
+
+
+
+
+
