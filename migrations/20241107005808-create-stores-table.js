@@ -1,4 +1,4 @@
-//このコードは Sequelize を使ったマイグレーションファイルで、stores というテーブルをデータベースに作成・削除するためのものです。
+//このコードは Sequelize を使ったマイグレーションファイルで、stores というテーブルをデータベースに作成・削除するためのもの
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */

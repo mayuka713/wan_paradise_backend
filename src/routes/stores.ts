@@ -120,23 +120,22 @@ router.get("/type/random/:store_type", async (req, res) => {
   try {
     const query = `
       SELECT
-  stores.id AS store_id,
-  stores.name AS store_name,
-  stores.description,
-  stores.store_img,
-  stores.address,
-  stores.phone_number,
-  stores.opening_hours,
-  stores.store_url,
-  prefectures.name AS prefecture_name
-FROM stores
-JOIN prefectures
-ON stores.prefecture_id = prefectures.id
-WHERE store_type = $1
-ORDER BY RANDOM()
-LIMIT 10;
-
-    `;
+        stores.id AS store_id,
+        stores.name AS store_name,
+        stores.description,
+        stores.store_img,
+        stores.address,
+        stores.phone_number,
+        stores.opening_hours,
+        stores.store_url,
+        prefectures.name AS prefecture_name
+        FROM stores
+        JOIN prefectures
+        ON stores.prefecture_id = prefectures.id
+        WHERE store_type = $1
+        ORDER BY RANDOM()
+        LIMIT 10;
+        `;
     const result = await pool.query(query, [parseInt(store_type, 10)]);
 
     if (result.rows.length === 0) {

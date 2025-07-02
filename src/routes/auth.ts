@@ -10,7 +10,7 @@ const COOKIE_NAME = "user_id"; // `user_id` のみをクッキーに保存
 const COOKIE_OPTIONS = {
   httpOnly: true, // JavaScript からのアクセスを禁止（セキュリティ対策）
   secure: process.env.NODE_ENV === "production", // 本番環境では HTTPS のみ
-  sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const, // ✅ クロスオリジン対応
+  sameSite: process.env.NODE_ENV === "production" ? "none" as const : "lax" as const, // クロスオリジン対応
   maxAge: 24 * 60 * 60 * 1000, //1日
 };
 
@@ -20,7 +20,7 @@ router.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const userResult = await pool.query("SELECT id, password FROM users WHERE email = $1", [email]);
+    const userResult = await pool.query("SELECT id, password, role FROM users WHERE email = $1", [email]);
 
     if (userResult.rows.length === 0) {
       return res.status(401).json({ error: "無効なメールアドレスまたはパスワードです。" });
@@ -41,7 +41,9 @@ router.post("/login", async (req: Request, res: Response) => {
     return res.status(200).json({
       message: "ログイン成功",
       user_id: user.id, // クライアントに `user_id` を返す
+      role: user.role,
     });
+    
   } catch (error) {
     console.error("ログイン中にエラー:", error);
     res.status(500).json({ error: "サーバーエラーが発生しました。" });
@@ -60,10 +62,10 @@ router.get("/me", async (req: Request, res: Response) => {
 
   try {
     //`users` テーブルから `id, email, name` を取得
-    const userResult = await pool.query("SELECT id, email, name FROM users WHERE id = $1", [userId]);
+    const userResult = await pool.query("SELECT id, email, name, role FROM users WHERE id = $1", [userId]);
 
     if (userResult.rows.length === 0) {
-      console.log("⚠️ [auth/me] ユーザーが見つかりません");
+      console.log("[auth/me] ユーザーが見つかりません");
       return res.status(401).json({ error: "未ログイン" });
     }
 
@@ -72,11 +74,13 @@ router.get("/me", async (req: Request, res: Response) => {
 
     // `user` オブジェクトを含めてレスポンスを返す
     res.json({ user });
+    
   } catch (error) {
     console.error("クッキー解析エラー:", error);
     res.status(500).json({ error: "サーバーエラーが発生しました。" });
   }
 });
+
 
 router.post("/update", async (req: Request, res: Response) => {
   const userId = req.cookies.user_id; // クッキーから user_id を取得

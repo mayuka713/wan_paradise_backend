@@ -46,9 +46,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production", // ✅ 本番環境のみ `true`
+    secure: process.env.NODE_ENV === "production", // 本番環境のみ `true`
     httpOnly: true,
-    sameSite: "none", // ✅ ローカルでは `lax`
+    sameSite: "none", // ローカルでは `lax`
   },
 }));
 
